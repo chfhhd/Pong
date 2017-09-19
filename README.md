@@ -9,7 +9,9 @@ Player1 (left)
 Player2 (right)  
 - Up = move up  
 - Down = move down  
-
+  
+Escape = exit game  
+  
 ### Credits:  
 Sicke Texturen by Bendedikt Zöller  
 Sicker Code by Marcel Croonenbroeck  
