@@ -61,8 +61,6 @@ namespace Pong
             CheckSliderPosition();
 
             collisionBox = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), collisionBox.Width, collisionBox.Height);
-            leftSide = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), Convert.ToInt32(size.X), Convert.ToInt32(size.Y / 3f));
-            rightSide = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y + (size.Y / 1.5f)), Convert.ToInt32(size.X), Convert.ToInt32(size.Y / 3f));
         }
 
         /// <summary>
@@ -113,12 +111,13 @@ namespace Pong
         {
             position = startPosition;
             collisionBox = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), collisionBox.Width, collisionBox.Height);
-            leftSide = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), Convert.ToInt32(size.X), Convert.ToInt32(size.Y / 3f));
-            rightSide = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y + (size.Y / 1.5f)), Convert.ToInt32(size.X), Convert.ToInt32(size.Y / 3f));
         }
 
         public Vector2 GetSideVector(Rectangle collisionBox)
         {
+            leftSide = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), Convert.ToInt32(size.X), Convert.ToInt32(size.Y / 3f));
+            rightSide = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y + (size.Y / 1.5f)), Convert.ToInt32(size.X), Convert.ToInt32(size.Y / 3f));
+
             bool left = leftSide.Intersects(collisionBox);
             bool right = rightSide.Intersects(collisionBox);
   

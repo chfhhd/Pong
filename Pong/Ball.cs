@@ -74,6 +74,7 @@ namespace Pong
         public void Reset(Vector2 moveVector)
         {
             position = startPosition;
+            collisionBox = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), collisionBox.Width, collisionBox.Height);
             this.moveVector = moveVector;
         }
     }

@@ -4,6 +4,7 @@
     {
         None,
         Started,
-        GameOver
+        GameOver,
+        CountDown
     }
 }
