@@ -1,7 +1,7 @@
 # Pong
 Just another pong game :)
 
-Credits:
+Credits:  
 Sicke Texturen by Bendedikt Zöller  
 Sicker Code by Marcel Croonenbroeck  
 Sicker Tester Benedikt Biesinger  
