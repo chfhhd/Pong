@@ -1,7 +1,16 @@
 # Pong
 Just another pong game :)
 
-Credits:  
+### Controls:  
+Player1 (left)  
+- W = move up  
+- S = move down  
+
+Player2 (right)  
+- Up = move up  
+- Down = move down  
+
+### Credits:  
 Sicke Texturen by Bendedikt Zöller  
 Sicker Code by Marcel Croonenbroeck  
 Sicke QA by Benedikt Biesinger  
