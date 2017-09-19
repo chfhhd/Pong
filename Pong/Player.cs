@@ -7,6 +7,7 @@ namespace Pong
 {
     public class Player
     {
+        private PlayerIndex playerInex;
         private Keys upKey;
         private Keys downKey;
         private Slider slider;
@@ -26,8 +27,9 @@ namespace Pong
             get => slider;
         }
 
-        public Player(Vector2 position, Texture2D texture, Vector2 size, Keys upKey, Keys downKey, Rectangle endZone, float fieldMinY, float fieldMaxY)
+        public Player(PlayerIndex playerIndex, Vector2 position, Texture2D texture, Vector2 size, Keys upKey, Keys downKey, Rectangle endZone, float fieldMinY, float fieldMaxY)
         {
+            this.playerInex = playerIndex;
             this.slider = new Slider(position, texture, size, fieldMinY, fieldMaxY);
             this.points = 0;
             this.upKey = upKey;
@@ -38,12 +40,14 @@ namespace Pong
         public void Update(GameTime gameTime)
         {
             KeyboardState state = Keyboard.GetState();
+            GamePadState padState = GamePad.GetState(playerInex);
+
             slider.ResetMoveVector();
-            if(state.IsKeyDown(upKey))
+            if(state.IsKeyDown(upKey) || padState.ThumbSticks.Left.Y < 0)
             {
                 slider.MoveUp();
             }
-            if(state.IsKeyDown(downKey))
+            if(state.IsKeyDown(downKey) || padState.ThumbSticks.Right.Y > 0)
             {
                 slider.MoveDown();
             }

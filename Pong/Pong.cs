@@ -19,7 +19,6 @@ namespace Pong
     {
         private static Random random = new Random();
         private const int maxScore = 3;
-        private const float duration = 3000;
         private const string startText = "press space to start the game";
 
         private GraphicsDeviceManager graphics;
@@ -29,13 +28,10 @@ namespace Pong
         private Ball ball;
         private Rectangle field;
 
-        private float elapsedTime;
+        private Countdown countdown;
         private string drawText;
-        private Vector2 textPosition;
 
         private SpriteFont font;
-        private SpriteFont boldFont;
-        private SpriteFont curentFont;
         private Texture2D background;
         private Texture2D sliderTexture;
         private Texture2D ballTexture;
@@ -44,9 +40,15 @@ namespace Pong
         public Pong()
         {
             graphics = new GraphicsDeviceManager(this);
+
+            //Change Screen resolution here
             graphics.PreferredBackBufferWidth = 1920;
             graphics.PreferredBackBufferHeight = 1080;
+            graphics.IsFullScreen = false;
             graphics.ApplyChanges();
+
+            IsMouseVisible = true;
+
             Content.RootDirectory = "Content";
         }
 
@@ -74,11 +76,12 @@ namespace Pong
             ballTexture = Content.Load<Texture2D>("ball");
             sliderTexture = Content.Load<Texture2D>("slider");
             background = Content.Load<Texture2D>("background");
-            boldFont = Content.Load<SpriteFont>("boldFont");
-            curentFont = font;
-            field = new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            SpriteFont boldFont = Content.Load<SpriteFont>("boldFont");
 
-            //SetupGame(ballTexture, sliderTexture);
+            field = new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            countdown = new Countdown(new Vector2(graphics.PreferredBackBufferWidth / 2, 100), boldFont, 3000);
+            countdown.OnCountdownElapsed += Countdown_OnCountdownElapsed;
+            drawText = startText;
         }
 
         /// <summary>
@@ -93,13 +96,9 @@ namespace Pong
 
             if(state != GameState.Started)
             {
-                if (state == GameState.None)
-                    drawText = startText;
-
                 if (state == GameState.CountDown)
                 {
-                    Countdown(gameTime);
-                    drawText = Math.Round((duration - elapsedTime) / 1000f).ToString();
+                    countdown.Update(gameTime);
                 }
                 else
                 {
@@ -116,22 +115,6 @@ namespace Pong
             }
 
             base.Update(gameTime);
-        }
-
-        /// <summary>
-        /// Update for core gameplay
-        /// </summary>
-        /// <param name="gameTime"></param>
-        private void GameUpdate(GameTime gameTime)
-        {
-            ball.Update(gameTime);
-            for (int i = 0; i < players.Length; i++)
-            {
-                players[i].Update(gameTime);
-                players[i].Collision(ball);
-            }
-
-            WallCollision(ball);
         }
 
         /// <summary>
@@ -152,44 +135,34 @@ namespace Pong
                 }
 
                 ball.Draw(spriteBatch);
+
+                if (state == GameState.CountDown)
+                    countdown.Draw(spriteBatch);
+
+                DrawScore();
             }
-            DrawText();
+            else
+            {
+                DrawText();
+            }
             spriteBatch.End();
             base.Draw(gameTime);
         }
 
         /// <summary>
-        /// Draws info text
+        /// Update for core gameplay
         /// </summary>
-        private void DrawText()
+        /// <param name="gameTime"></param>
+        private void GameUpdate(GameTime gameTime)
         {
-            if (state == GameState.Started)
+            ball.Update(gameTime);
+            for (int i = 0; i < players.Length; i++)
             {
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < players.Length; i++)
-                {
-                    sb.Append("P");
-                    sb.Append((i + 1));
-                    sb.Append(":");
-                    sb.Append(players[i].Points);
-                    if(i+1 < players.Length)
-                        sb.Append(" | ");
-                }
-                drawText = sb.ToString();
-                textPosition = new Vector2(textPosition.X, 20); // player score position
-            }
-            else if(state == GameState.CountDown)
-            {
-                textPosition = new Vector2(textPosition.X, 50); //Countdown position
-            }
-            else
-            {
-                textPosition = new Vector2(textPosition.X, graphics.PreferredBackBufferHeight / 2); //Center text position
+                players[i].Update(gameTime);
+                players[i].Collision(ball);
             }
 
-            Vector2 length = curentFont.MeasureString(drawText);
-            textPosition = new Vector2(graphics.PreferredBackBufferWidth / 2f - (length.X / 2f), textPosition.Y);
-            spriteBatch.DrawString(curentFont, drawText, textPosition, Color.White);
+            WallCollision(ball);
         }
 
         /// <summary>
@@ -216,7 +189,6 @@ namespace Pong
             {
                 if(players[i].Points >= maxScore)
                 {
-                    curentFont = font;
                     drawText = "Player " + (i + 1).ToString() + " won (Press space to restart)!";
                     state = GameState.GameOver;
                     return;
@@ -231,11 +203,13 @@ namespace Pong
         /// <param name="sliderTexture">Slider texture</param>
         private void SetupGame(Texture2D ballTexture, Texture2D sliderTexture)
         {
+            drawText = startText;
             Vector2 ballSize = new Vector2(ballTexture.Width, ballTexture.Height);
             Vector2 sliderSize = new Vector2(sliderTexture.Width, sliderTexture.Height);
 
             players = new Player[2];
-            players[0] = new Player(new Vector2(0, (graphics.PreferredBackBufferHeight / 2) - (sliderSize.Y / 2)),
+            players[0] = new Player(PlayerIndex.One,
+                new Vector2(0, (graphics.PreferredBackBufferHeight / 2) - (sliderSize.Y / 2)),
                 sliderTexture,
                 sliderSize,
                 Keys.W,
@@ -244,7 +218,8 @@ namespace Pong
                 0,
                 graphics.PreferredBackBufferHeight);
 
-            players[1] = new Player(new Vector2(graphics.PreferredBackBufferWidth - sliderSize.X, (graphics.PreferredBackBufferHeight / 2) - (sliderSize.Y / 2)),
+            players[1] = new Player(PlayerIndex.Two,
+                new Vector2(graphics.PreferredBackBufferWidth - sliderSize.X, (graphics.PreferredBackBufferHeight / 2) - (sliderSize.Y / 2)),
                 sliderTexture,
                 sliderSize,
                 Keys.Up,
@@ -266,7 +241,6 @@ namespace Pong
         /// </summary>
         private void ResetPositions()
         {
-            curentFont = boldFont;
             state = GameState.CountDown;
             for (int i = 0; i < players.Length; i++)
             {
@@ -296,17 +270,45 @@ namespace Pong
         }
 
         /// <summary>
-        /// Countdown
+        /// Event raised when countdowe elapsed
         /// </summary>
-        /// <param name="gameTime">Game time</param>
-        private void Countdown(GameTime gameTime)
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Countdown_OnCountdownElapsed(object sender, EventArgs e)
         {
-            elapsedTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-            if(elapsedTime >= duration)
+            state = GameState.Started;
+        }
+
+        /// <summary>
+        /// Draws info text
+        /// </summary>
+        private void DrawText()
+        {
+            Vector2 length = font.MeasureString(drawText);
+            Vector2 textPosition = new Vector2(graphics.PreferredBackBufferWidth / 2f - (length.X / 2f), graphics.PreferredBackBufferHeight / 2);
+            spriteBatch.DrawString(font, drawText, textPosition, Color.White);
+        }
+
+        /// <summary>
+        /// Draws player score
+        /// </summary>
+        private void DrawScore()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < players.Length; i++)
             {
-                elapsedTime = 0;
-                state = GameState.Started;
+                sb.Append("P");
+                sb.Append((i + 1));
+                sb.Append(":");
+                sb.Append(players[i].Points);
+                if (i + 1 < players.Length)
+                    sb.Append(" | ");
             }
+
+            string drawText = sb.ToString();
+            Vector2 length = font.MeasureString(drawText);
+            Vector2 textPosition = new Vector2(graphics.PreferredBackBufferWidth / 2f - (length.X / 2f), 20);
+            spriteBatch.DrawString(font, drawText, textPosition, Color.White);
         }
     }
 }
