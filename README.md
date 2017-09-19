@@ -13,4 +13,4 @@ Player2 (right)
 ### Credits:  
 Sicke Texturen by Bendedikt Zöller  
 Sicker Code by Marcel Croonenbroeck  
-Sicke QA by Benedikt Biesinger  
+Sicke QA by Benedikt Biesinger & Max Freytag  
