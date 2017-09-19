@@ -41,15 +41,20 @@ namespace Pong
         {
             KeyboardState state = Keyboard.GetState();
             GamePadState padState = GamePad.GetState(playerInex);
-
             slider.ResetMoveVector();
             if(state.IsKeyDown(upKey) || padState.ThumbSticks.Left.Y < 0)
             {
-                slider.MoveUp();
+                if (padState.ThumbSticks.Left.Y < 0)
+                    slider.Move(-1, padState.ThumbSticks.Left.Y);
+                else
+                    slider.Move(-1, 1);
             }
             if(state.IsKeyDown(downKey) || padState.ThumbSticks.Right.Y > 0)
             {
-                slider.MoveDown();
+                if (padState.ThumbSticks.Left.Y > 0)
+                    slider.Move(1, padState.ThumbSticks.Left.Y);
+                else
+                    slider.Move(1,1);
             }
 
             slider.Update(gameTime);

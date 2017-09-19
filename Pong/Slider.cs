@@ -6,6 +6,8 @@ namespace Pong
 {
     public class Slider
     {
+        private const float speed = 2;
+
         private float fieldMinY;
         private float fieldMaxY;
 
@@ -78,22 +80,16 @@ namespace Pong
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, collisionBox, Color.White);
-        }
+        } 
 
         /// <summary>
-        /// Moves the slider upwards
+        /// Moves slider
         /// </summary>
-        public void MoveUp()
+        /// <param name="direction">Indicates the direction</param>
+        /// <param name="multiplier">Manipulates the speed</param>
+        public void Move(float direction, float multiplier)
         {
-            moveVector += new Vector2(0, -2);
-        }
-
-        /// <summary>
-        /// Moves the slider downwards
-        /// </summary>
-        public void MoveDown()
-        {
-            moveVector += new Vector2(0, 2);
+            moveVector += new Vector2(0, direction * Math.Abs(multiplier));
         }
 
         /// <summary>
