@@ -27,6 +27,11 @@ namespace Pong
             get => slider;
         }
 
+        public PlayerIndex Index
+        {
+            get => playerInex;
+        }
+
         public Player(PlayerIndex playerIndex, Vector2 position, Texture2D texture, Vector2 size, Keys upKey, Keys downKey, Rectangle endZone, float fieldMinY, float fieldMaxY)
         {
             this.playerInex = playerIndex;

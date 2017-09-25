@@ -77,5 +77,12 @@ namespace Pong
             collisionBox = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), collisionBox.Width, collisionBox.Height);
             this.moveVector = moveVector;
         }
+
+        public void OverwritePosition(Vector2 position, Vector2 moveVector)
+        {
+            this.position = position;
+            this.moveVector = moveVector;
+            collisionBox = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), collisionBox.Width, collisionBox.Height);
+        }
     }
 }

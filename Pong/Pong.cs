@@ -69,7 +69,7 @@ namespace Pong
         /// all of your content
         /// </summary>
         protected override void LoadContent()
-        {
+        {           
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("font");
@@ -99,6 +99,7 @@ namespace Pong
                 if (state == GameState.CountDown)
                 {
                     countdown.Update(gameTime);
+
                 }
                 else
                 {

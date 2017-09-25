@@ -74,7 +74,6 @@ namespace Pong
                 position.Y = fieldMinY;
             else if (position.Y + size.Y > fieldMaxY)
                 position.Y = fieldMaxY - size.Y;
-
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -106,6 +105,12 @@ namespace Pong
         public void ResetPosition()
         {
             position = startPosition;
+            collisionBox = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), collisionBox.Width, collisionBox.Height);
+        }
+
+        public void OverwritePosition(Vector2 position)
+        {
+            this.position = position;
             collisionBox = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), collisionBox.Width, collisionBox.Height);
         }
 
