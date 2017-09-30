@@ -23,20 +23,20 @@ namespace Pong
 
         public Rectangle CollisionBox
         {
-            get => collisionBox;
-            set => collisionBox = value;
+            get { return collisionBox; }
+            set { collisionBox = value; }
         }
 
         public Vector2 MoveVector
         {
-            get => moveVector;
-            set => moveVector = value;
+            get { return moveVector; }
+            set { moveVector = value; }
         }
 
         public Vector2 Position
         {
-            get => position;
-            set => position = value;           
+            get { return position; }
+            set { position = value; }           
         }
 
         /// <summary>

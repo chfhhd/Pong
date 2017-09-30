@@ -18,18 +18,20 @@ namespace Pong
 
         public int Points
         {
-            get => points;
-            set => points = value;
+            get { return points; }
+            set { points = value; }
         }
 
         public Slider Slider
         {
-            get => slider;
+            get
+            { return slider; }
         }
 
         public PlayerIndex Index
         {
-            get => playerInex;
+            get
+            { return playerInex; }
         }
 
         public Player(PlayerIndex playerIndex, Vector2 position, Texture2D texture, Vector2 size, Keys upKey, Keys downKey, Rectangle endZone, float fieldMinY, float fieldMaxY)
