@@ -15,7 +15,7 @@ Player2 (right)
 Escape = exit game  
   
 ### Credits:  
-Sicke Texturen by Bendedikt Zöller  
-Sicker Code by Marcel Croonenbroeck  
-Sicke QA by Benedikt Biesinger & Max Freytag  
+Texturen by Bendedikt Zöller  
+Code by Marcel Croonenbroeck  
+QA by Benedikt Biesinger & Max Freytag  
 
